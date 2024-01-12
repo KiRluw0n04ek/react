@@ -6,6 +6,13 @@ const FilmList = () => {
   const [filteredFilms, setFilteredFilms] = useState(films);
   const [selectedFilm, setSelectedFilm] = useState(null);
   const [watchedFilms, setWatchedFilms] = useState([]);
+  const [newFilmData, setNewFilmData] = useState({
+    name: '',
+    year: '',
+    image: '',
+    director: '',
+    description: '',
+  });
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -48,6 +55,30 @@ const FilmList = () => {
     const selectedFilmsCount = watchedFilms.length;
 
     return (selectedFilmsCount / totalFilms) * 100;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewFilmData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleAddFilm = () => {
+    const newFilm = {
+      id: filteredFilms.length + 1,
+      ...newFilmData,
+    };
+
+    setFilteredFilms((prevFilms) => [...prevFilms, newFilm]);
+    setNewFilmData({
+      name: '',
+      year: '',
+      image: '',
+      director: '',
+      description: '',
+    });
   };
 
   return (
@@ -98,6 +129,31 @@ const FilmList = () => {
             <div key={film}>{film}</div>
           ))}
         </div>
+      </div>
+      <div className="add-film-form">
+        <h2>Додати новий фільм</h2>
+        <input
+          type="text"
+          placeholder="Назва"
+          name="name"
+          value={newFilmData.name}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          placeholder="Рік"
+          name="year"
+          value={newFilmData.year}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          placeholder="Посилання на зображення"
+          name="image"
+          value={newFilmData.image}
+          onChange={handleInputChange}
+        />
+        <button onClick={handleAddFilm}>Додати фільм</button>
       </div>
     </div>
   );
